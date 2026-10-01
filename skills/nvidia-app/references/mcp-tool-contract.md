@@ -1,4 +1,4 @@
-# Restricted NVIDIA App Overlay MCP Contract
+# NVIDIA App Overlay MCP Contract
 
 ## Scope
 
@@ -20,7 +20,7 @@ nvapp_overlay_configure_filters
 nvapp_overlay_get_current_game_info
 ```
 
-The live `nvapp_overlay_capture` schema advertises `toggle_highlights`, which is authorized by this restricted skill workflow. `toggle_desktop_capture` is not advertised and remains prohibited. `nvapp_overlay_configure_filters` is restricted to `rtx_dvc`; other filter values are not authorized. `nvapp_overlay_get_status` may report state for excluded capabilities, but that read access does not extend the mutation scope.
+The live `nvapp_overlay_capture` schema advertises `toggle_highlights`, which is authorized by this skill workflow. `toggle_desktop_capture` is not advertised and remains prohibited. `nvapp_overlay_configure_filters` supports only `rtx_dvc`; other filter values are not authorized. `nvapp_overlay_get_status` may report state for excluded capabilities, but that read access does not extend the mutation scope.
 
 ## Access and readiness
 
@@ -115,7 +115,7 @@ If the necessary field is missing, ask for the target state. Do not call status 
 
 ## `nvapp_overlay_capture`
 
-### Restricted input contract
+### Input contract
 
 ```json
 {
@@ -192,7 +192,7 @@ Possible UI-handler errors are `invalid_params` and `overlay_command_failed`, in
 
 ## `nvapp_overlay_configure_filters`
 
-### Restricted input contract
+### Input contract
 
 ```json
 {

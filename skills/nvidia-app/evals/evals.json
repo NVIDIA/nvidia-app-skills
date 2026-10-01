@@ -185,7 +185,7 @@
     {
       "id": "nvidia-app-negative-desktop-capture-015",
       "prompt": "Enable NVIDIA Desktop Capture so I can record my desktop.",
-      "expected_output": "The restricted NVIDIA App Overlay workflow is not selected and does not invoke toggle_desktop_capture.",
+      "expected_output": "The NVIDIA App Overlay workflow is not selected and does not invoke toggle_desktop_capture.",
       "assertions": [
         "The agent does not activate the nvidia-app skill for a Desktop Capture mutation",
         "The agent does not call nvapp_overlay_capture with action toggle_desktop_capture"
@@ -384,6 +384,64 @@
         "The agent calls nvapp_client_set_laptop_feature with { batteryBoost: { enabled: true } } only when supported",
         "The agent omits game and useGlobal",
         "The agent does not include whisperMode"
+      ],
+      "expected_skill": "nvidia-app",
+      "expected_script": null,
+      "should_trigger": true
+    },
+    {
+      "id": "nvidia-app-game-optimization-default-ac-030",
+      "prompt": "Apply the Recommended optimization preset to Cyberpunk 2077.",
+      "expected_output": "The agent validates the exact game and optimization support, then calls nvapp_client_set_game_optimization without inventing a power source; NVIDIA App defaults the request to AC.",
+      "assertions": [
+        "The agent resolves Cyberpunk 2077 with nvapp_client_get_applications",
+        "The agent checks opsSupported and Recommended preset availability",
+        "The agent calls nvapp_client_set_game_optimization with { game: \"Cyberpunk 2077\", preset: \"Recommended\" }",
+        "The agent does not add powerSource unless the user requests AC or Battery"
+      ],
+      "expected_skill": "nvidia-app",
+      "expected_script": null,
+      "should_trigger": true
+    },
+    {
+      "id": "nvidia-app-game-optimization-battery-031",
+      "prompt": "Apply the Recommended optimization preset to Cyberpunk 2077 while I am running on battery power.",
+      "expected_output": "The agent validates the exact game, optimization support, and Battery preset availability, then calls nvapp_client_set_game_optimization with Battery as the power source.",
+      "assertions": [
+        "The agent resolves Cyberpunk 2077 with nvapp_client_get_applications",
+        "The agent checks opsSupported and the Battery availablePresets",
+        "The agent calls nvapp_client_set_game_optimization with { game: \"Cyberpunk 2077\", preset: \"Recommended\", powerSource: \"Battery\" }",
+        "The agent uses Battery as the powerSource value"
+      ],
+      "expected_skill": "nvidia-app",
+      "expected_script": null,
+      "should_trigger": true
+    },
+    {
+      "id": "nvidia-app-game-optimization-resolution-prerequisite-032",
+      "prompt": "Optimize Cyberpunk 2077 for Quality. Its AC profile reports unavailableReason: Presets cannot be applied until the desktop resolution is changed to 2560x1440.",
+      "expected_output": "The agent does not call the optimization setter, reports the returned unavailableReason including desktop resolution 2560x1440, and does not change the display resolution implicitly.",
+      "assertions": [
+        "The agent interprets unavailableReason as a blocking prerequisite",
+        "The agent reports the returned reason including 2560x1440",
+        "The agent does not call nvapp_client_set_game_optimization",
+        "The agent does not change the desktop resolution implicitly",
+        "The agent does not describe the game as lacking OPS support"
+      ],
+      "expected_skill": "nvidia-app",
+      "expected_script": null,
+      "should_trigger": true
+    },
+    {
+      "id": "nvidia-app-game-optimization-configuration-prerequisite-033",
+      "prompt": "Revert Cyberpunk 2077 optimization. Its AC profile reports unavailableReason: Presets cannot be applied because the current game configuration is unavailable. Start and close the game or app, or edit its settings, then try again.",
+      "expected_output": "The agent does not call the optimization setter and tells the user to start and then close the game or app, or edit its settings, before refreshing application details and retrying.",
+      "assertions": [
+        "The agent interprets unavailableReason as a blocking prerequisite",
+        "The agent does not call nvapp_client_set_game_optimization even for Revert",
+        "The agent gives the start-and-close or edit-settings recovery guidance",
+        "The agent recommends refreshing nvapp_client_get_applications before retrying",
+        "The agent does not report a successful Revert"
       ],
       "expected_skill": "nvidia-app",
       "expected_script": null,

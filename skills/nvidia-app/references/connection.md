@@ -26,7 +26,7 @@ Connect directly to the endpoints below, without a client entry, when any of the
 - The client offers no way for the agent to add or reload an MCP entry.
 - The entry was written, but `nvapp_` tools are still absent from the current session and the user does not want to restart or reload.
 
-In that case, complete the user's request over Streamable HTTP (or the stdio bridge) using the same documented tools, schemas, and restrictions. Name the fallback in your reply and note that registering `nvidia-app` avoids repeating it. Read `server.json` fresh on each auth-enabled connection and keep the token out of transcripts, logs, and command lines.
+In that case, complete the user's request over Streamable HTTP (or the stdio bridge) using the same documented tools, schemas, and restrictions. Name the fallback in your reply and note that registering `nvidia-app` avoids repeating it.
 
 - If connection or tool discovery still fails after the applicable configuration and reload attempts, instruct the user to verify that NVIDIA App is installed, that it is the latest available version (11.0.9.5xx or above), and that MCP server access is enabled in NVIDIA App Settings before retrying.
 
@@ -56,7 +56,7 @@ The server registers `/mcp/` with http.sys and reports its client URL without th
 
 ### Port fallback
 
-If registration of port `13508` fails for a reason other than `ERROR_ACCESS_DENIED`, the server falls back in two tiers. It first tries the adjacent range next to the default, then the ephemeral range:
+If the server fails to register port `13508`, it falls back in two tiers. It first tries the adjacent range next to the default, then the ephemeral range:
 
 ```text
 Tier 1 (adjacent):  13509, 13510, 13511, 13512, 13513,
@@ -65,9 +65,28 @@ Tier 2 (ephemeral): 49152, 49153, 49154, 49155, 49156,
                     49157, 49158, 49159, 49160, 49161
 ```
 
-When a fallback port is in use, an MCP client cannot generically discover it from disk; use the default endpoint, the NVIDIA App-reported `http_url`, or the stdio bridge.
+If other methods do not reveal the MCP port, use this discovery file as the fallback:
 
-If http.sys returns `ERROR_ACCESS_DENIED`, the backend does not try the fallback range. NVIDIA App continues in pipe-only degraded mode when the named-pipe server is available.
+```text
+%LOCALAPPDATA%\NVIDIA Corporation\NvAppMcpServer\server.json
+```
+
+Example shape:
+
+```json
+{
+  "pipe": "<per-user named-pipe name>",
+  "http": "http://127.0.0.1:13508/mcp/",
+  "version": "1.0.0",
+  "pid": 12345
+}
+```
+
+Read `server.json` fresh and use its `http` value, which contains the active endpoint and fallback port. The `http` property is omitted when HTTP failed to start; in that case, use the stdio bridge.
+
+If `server.json` cannot be found or read, follow the connection and tool discovery failure guidance above.
+
+If the server cannot register any HTTP port, NVIDIA App continues in pipe-only degraded mode when the named-pipe server is available.
 
 ## Stdio connection
 
@@ -110,7 +129,7 @@ Connection success and Overlay success are separate:
 3. The MCP server readiness event is signaled.
 4. NVIDIA In-Game Overlay independently signals its own readiness event.
 
-The restricted Overlay tools in this skill can return `overlay_not_available` even after the MCP connection succeeds. Non-Overlay NVIDIA App tools do not depend on Overlay readiness.
+The Overlay tools in this skill can return `overlay_not_available` even after the MCP connection succeeds. Non-Overlay NVIDIA App tools do not depend on Overlay readiness.
 
 ## Troubleshooting
 

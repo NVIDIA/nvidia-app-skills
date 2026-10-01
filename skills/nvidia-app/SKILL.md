@@ -1,18 +1,16 @@
 ---
 name: nvidia-app
 description: >
-  Use NVIDIA App's local MCP tools for application, driver, game-optimization,
-  laptop-feature, and restricted In-Game Overlay operations and troubleshooting.
+  NVIDIA App MCP: drivers, games, laptops, overlay. Check drivers, manage and
+  optimize games, configure laptop features.
 metadata:
-  author: "Sahil Singh <sahils@nvidia.com>"
+  author: "NVIDIA CORPORATION <info@nvidia.com>"
   tags:
     - nvidia-app
-    - mcp
     - in-game-overlay
-    - recording
   domain: system-tools
   team: nvidia-app
-  version: "1.1.5"
+  version: "1.1.8"
 ---
 
 # NVIDIA App MCP Overlay
@@ -22,9 +20,9 @@ metadata:
 Use this skill for one product integration: operating NVIDIA App through its local MCP server. It has two routed modes:
 
 - General NVIDIA App operations cover application listing and launch, driver status and release notes, per-game optimization, and laptop features.
-- In-Game Overlay operations use the deliberately restricted workflow below.
+- In-Game Overlay operations use the workflow below.
 
-The restricted Overlay workflow supports:
+The Overlay workflow supports:
 
 - Read high-level Overlay status.
 - Start or stop gameplay recording.
@@ -62,12 +60,12 @@ MCP server readiness and Overlay readiness are separate. A successful MCP connec
 
 ## Instructions
 
-1. **Classify the request.** Route general NVIDIA App requests through live tool discovery. Route `nvapp_overlay_` requests through the restricted Overlay workflow. Read-only Overlay status can include fields for excluded features, but that does not authorize changing them.
+1. **Classify the request.** Route general NVIDIA App requests through live tool discovery. Route `nvapp_overlay_` requests through the Overlay workflow. Read-only Overlay status can include fields for excluded features, but that does not authorize changing them.
 2. **Register `nvidia-app` in the current MCP client, or fall back explicitly.** The client is registered only when this session's live tool catalog advertises `nvapp_` tools; an open loopback port or a working stdio bridge is not registration. If those tools are absent, attempt registration per [references/connection.md](references/connection.md) before the first `nvapp_` call. Registration is the default path because it persists across turns and sessions. A reachable HTTP endpoint is not a reason to skip the attempt.
 3. **Use the direct connection only as a declared fallback.** If the user declines the configuration change, the client cannot be modified or reloaded, or registration succeeds but `nvapp_` tools still do not appear in this session, connect directly to the loopback HTTP endpoint (or the stdio bridge) and continue with the same documented tool contracts. Say which path you used and that registering `nvidia-app` would make access persistent. Do not silently prefer the direct path.
 4. **Discover general tools.** For a non-Overlay request, inspect `tools/list` on whichever connection you established, then read [references/general-tools.md](references/general-tools.md) before selecting or calling one of its seven documented public tools. Select only a returned tool whose description, schema, and annotations most narrowly match the user's in-scope intent, and follow any narrower live schema and annotations.
 5. **Resolve an Overlay target state.** For an explicit start, stop, enable, disable, show, or hide request, call the mapped mutation directly. For a true toggle with no target state, read status once and invert only the corresponding Boolean.
-6. **Validate the arguments.** For general tools, follow [references/general-tools.md](references/general-tools.md) and any narrower live schema. For restricted Overlay tools, use exactly the mapped fields below. Never invent unsupported arguments.
+6. **Validate the arguments.** For general tools, follow [references/general-tools.md](references/general-tools.md) and any narrower live schema. For Overlay tools, use exactly the mapped fields below. Never invent unsupported arguments.
 7. **Execute in request order.** Fulfill compound requests by issuing each supported operation as its own tool call in the user's order. Make only the calls needed for the requested operations. Respect the access tier and any consent decision; never raise access or enable another feature as a workaround.
 8. **Interpret the result literally.** Report only returned fields and outcomes. Overlay mutations return a human-readable message; report that message without inventing structured success fields. If a mutation message is ambiguous, state that the outcome is not independently confirmed instead of making a follow-up Overlay status call solely to verify it.
 
@@ -102,7 +100,7 @@ Read [references/general-tools.md](references/general-tools.md) before selecting
 
 Use only a documented tool advertised by live `tools/list`. The packaged instructions are self-contained and do not depend on repository-internal schema sources.
 
-## Restricted Overlay operations
+## Overlay operations
 
 Use only the tools in this table and the authorized arguments shown here:
 
@@ -162,7 +160,7 @@ Treat every one of them as a privacy-affecting operation:
 
 - Installed NVIDIA App versions and access levels can expose different general tools and output contracts; live `tools/list` is authoritative.
 - MCP readiness does not guarantee Overlay readiness, and a successful mutation message does not prove more than the returned result.
-- The restricted workflow cannot mutate Desktop Capture or filters other than RTX Dynamic Vibrance, choose screenshot format or destination, or configure Statistics Overlay layout and styling.
+- The Overlay workflow cannot mutate Desktop Capture or filters other than RTX Dynamic Vibrance, choose screenshot format or destination, or configure Statistics Overlay layout and styling.
 - Missing fields are unknown, not implicit false values, and unavailable tools or backend timeouts must not be replaced with inferred data.
 
 ## Examples
@@ -229,4 +227,4 @@ Overlay mutations return a human-readable message rather than structured success
 - Read [references/general-tools.md](references/general-tools.md) for live discovery, schema use, routing, and result handling for non-Overlay NVIDIA App operations.
 - Read [references/overlay-capture.md](references/overlay-capture.md) for recording, Instant Replay, Highlights, screenshots, unsupported qualifiers, access, and capture errors.
 - Read [references/overlay-state.md](references/overlay-state.md) for status routing, true toggles, Statistics Overlay visibility, RTX Dynamic Vibrance, and current-game lookup.
-- Read [references/mcp-tool-contract.md](references/mcp-tool-contract.md) for the canonical status field set and when exact restricted schemas, outputs, access tiers, or error forms are needed.
+- Read [references/mcp-tool-contract.md](references/mcp-tool-contract.md) for the canonical status field set and when exact Overlay schemas, outputs, access tiers, or error forms are needed.

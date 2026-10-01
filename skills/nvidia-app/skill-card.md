@@ -1,5 +1,5 @@
 ## Description: <br>
-Use NVIDIA App's local MCP tools for application, driver, game-optimization, laptop-feature, and restricted In-Game Overlay operations and troubleshooting. <br>
+NVIDIA App MCP: drivers, games, laptops, overlay. Check drivers, manage and optimize games, configure laptop features. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -9,14 +9,14 @@ NVIDIA <br>
 ### License/Terms of Use: <br>
 CC-BY-4.0 AND Apache 2.0 <br>
 ## Use Case: <br>
-Developers and engineers who use NVIDIA App to manage drivers, optimize game settings, and control In-Game Overlay recording, screenshots, and display features through local MCP tools. <br>
+Developers and engineers use this skill to operate NVIDIA App through its local MCP server for driver management, game optimization, laptop feature configuration, and In-Game Overlay control. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Requirements / Dependencies: <br>
-**Requires API Key or External Credential:** [Yes] <br>
-**Credential Type(s):** [API key] <br>
+**Requires API Key or External Credential:** [No] <br>
+**Credential Type(s):** [None] <br>
 
 Do not include secrets in prompts/logs/output; use least-privilege credentials; rotate keys as appropriate. <br>
 
@@ -25,6 +25,7 @@ Risk: Review before execution as proposals could introduce incorrect or misleadi
 Mitigation: Review and scan skill before deployment. <br>
 
 ## Reference(s): <br>
+- [NVIDIA App](https://www.nvidia.com/en-us/software/nvidia-app/) <br>
 - [connection.md](references/connection.md) <br>
 - [general-tools.md](references/general-tools.md) <br>
 - [mcp-tool-contract.md](references/mcp-tool-contract.md) <br>
@@ -33,8 +34,8 @@ Mitigation: Review and scan skill before deployment. <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, Configuration instructions] <br>
-**Output Format:** [Markdown with inline JSON code blocks] <br>
+**Output Type(s):** [API Calls, Configuration instructions, Analysis] <br>
+**Output Format:** [Text with structured MCP tool-call results] <br>
 **Output Parameters:** [1D] <br>
 **Other Properties Related to Output:** [None] <br>
 
@@ -45,39 +46,39 @@ Mitigation: Review and scan skill before deployment. <br>
 
 
 ## Evaluation Tasks: <br>
-28 evaluation tasks (25 positive, 3 negative), each run with 3 attempts per task in isolated k8s-sandbox pods. <br>
+32 evaluation tasks (29 positive, 3 negative), 3 attempts per task in isolated sandbox pods. <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
 - Security: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
 - Correctness: Checks final-answer correctness against the reference answer. <br>
-- Discoverability: Checks whether the expected skill was selected and the workflow executed. <br>
-- Effectiveness: Checks whether the user's goal was achieved and the expected workflow behavior was followed (50% goal_accuracy + 50% behavior_check). <br>
-- Efficiency: Checks tool-call productivity and token efficiency (50% skill_efficiency + 50% token_efficiency). <br>
+- Discoverability: Checks whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- Effectiveness: Checks whether the user's goal was achieved (50%) and expected workflow behavior was followed (50%). <br>
+- Efficiency: Checks tool-call productivity (50%) and token efficiency (50%). <br>
 
 Underlying evaluation signals used in this run: <br>
-- `security`: Detects unsafe operations, secret leakage, and unauthorized access. <br>
-- `accuracy`: Verifies final-answer correctness against the reference answer. <br>
-- `skill_execution`: Verifies the expected skill was selected, decoys were avoided, and the workflow executed. <br>
-- `goal_accuracy`: Verifies whether the user's goal was achieved. <br>
-- `behavior_check`: Verifies whether the expected workflow behavior was followed. <br>
-- `skill_efficiency`: Measures tool-call productivity. <br>
-- `token_efficiency`: Measures actual uncached prompt plus completion token usage. <br>
+- `security`: Unsafe operations, secret leakage, and unauthorized access. <br>
+- `accuracy`: Final-answer correctness against the reference answer. <br>
+- `skill_execution`: Whether the expected skill was selected and the workflow executed. <br>
+- `goal_accuracy`: Whether the user's goal was achieved. <br>
+- `behavior_check`: Whether the expected workflow behavior was followed. <br>
+- `skill_efficiency`: Tool-call productivity. <br>
+- `token_efficiency`: Actual uncached prompt plus completion token usage. <br>
 
 
 
 ## Evaluation Results: <br>
-| Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
+| Measure | Claude Code | Codex |
 |---|---:|---:|
-| Overall | 79.3% — baseline ran, but no comparable score was available; uplift unavailable | 67.9% — baseline ran, but no comparable score was available; uplift unavailable |
-| Security | 100.0% → 76.8% (-23.2 points) | 84.0% → 74.2% (-9.8 points) |
-| Correctness | 8.7% → 85.0% (+76.3 points) | 15.0% → 56.4% (+41.4 points) |
-| Discoverability | 97.6% — baseline ran, but no comparable score was available; uplift unavailable | 83.7% — baseline ran, but no comparable score was available; uplift unavailable |
-| Effectiveness | 20.3% → 40.7% (+20.4 points) | 22.0% → 30.9% (+8.9 points) |
-| Efficiency | 96.3% — baseline ran, but no comparable score was available; uplift unavailable | 94.4% — baseline ran, but no comparable score was available; uplift unavailable |
+| Overall | 78.8% | 68.0% |
+| Security | 71.9% | 76.3% |
+| Correctness | 86.9% | 57.5% |
+| Discoverability | 97.9% | 81.6% |
+| Effectiveness | 41.1% | 31.0% |
+| Efficiency | 96.1% | 93.6% |
 
 ## Skill Version(s): <br>
-1.1.5 (source: frontmatter) <br>
+1.1.8 (source: frontmatter) <br>
 
 ## Ethical Considerations: <br>
 NVIDIA believes Trustworthy AI is a shared responsibility and we have established policies and practices to enable development for a wide array of AI applications. When downloaded or used in accordance with our terms of service, developers should work with their internal team to ensure this skill meets requirements for the relevant industry and use case and addresses unforeseen product misuse. <br>

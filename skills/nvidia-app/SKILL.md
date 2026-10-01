@@ -50,7 +50,7 @@ Resolve information in this order: explicit user instructions, fresh live MCP sc
 
 ## Prerequisites
 
-- Windows host with NVIDIA App installed and its NvContainer-hosted MCP plugin running.
+- Windows host with NVIDIA App installed (version 11.0.9.5xx or above) and its NvContainer-hosted MCP plugin running.
 - Standard NVIDIA App executable path: `%ProgramFiles%\NVIDIA Corporation\NVIDIA App\CEF\NVIDIA App.exe`.
 - MCP server access is enabled when NVIDIA App exposes a master toggle.
 - NVIDIA In-Game Overlay is enabled, running, and ready before any `nvapp_overlay_` call.

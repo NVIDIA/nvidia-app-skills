@@ -71,16 +71,10 @@ MCP server readiness and Overlay readiness are separate. A successful MCP connec
 
 ## Connecting
 
-Try these in order and use the first that works:
 
-1. An existing valid `nvidia-app` entry in the current MCP client.
-2. A newly registered `nvidia-app` entry in that client.
-3. A direct Streamable HTTP connection to the loopback endpoint.
-4. The stdio bridge, when HTTP is unavailable or the client manages a local relay process.
 
-Options 3 and 4 are legitimate fallbacks, not workarounds; report which one you used.
 
-The default auth-disabled HTTP endpoint is:
+The default HTTP endpoint is:
 
 ```text
 http://127.0.0.1:13508/mcp

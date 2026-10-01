@@ -11,10 +11,10 @@ The stdio executable is a relay, not a standalone server. If NVIDIA App's MCP ma
 
 ## Agent-side configuration
 
-When a connection is needed and `nvidia-app` is not already registered with the current MCP client, add it to that client using an available MCP-management capability or the client's documented configuration mechanism. Do not stop at showing configuration JSON when the agent can apply it directly. Prefer registration even when the loopback endpoint already answers, because a registered entry persists and exposes the tools to later turns and sessions.
+When a connection is needed and `nvidia-app` is not already registered with the current MCP client, first try to add it to that client using an available MCP-management capability or the client's documented configuration mechanism. Do not stop at showing configuration JSON when the agent can apply it directly.
 
 - Inspect the existing client configuration first; reuse a valid `nvidia-app` entry and do not create a duplicate.
-- Register with the Streamable HTTP connection described below. Use the stdio bridge only when HTTP is unavailable or the current client requires or manages a local relay process. Obtain any required approval before changing client configuration, and never expose or persist authentication material outside the protected client configuration.
+- Prefer the Streamable HTTP connection described below. Use the stdio bridge only when HTTP is unavailable or the current client requires or manages a local relay process.
 - After adding or reloading the entry, call `tools/list` to verify the connection and tool discovery.
 - If the agent cannot modify or reload its own MCP configuration, provide the exact configuration and state the specific action the user must perform. Do not guess an unverified configuration location or format.
 
